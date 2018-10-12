@@ -15,4 +15,28 @@
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
-	</classpathentry>	
+	</classpathentry>
+
+将项目推送到github中
+	1、eclipse配置git(preferences-->team-->git-->configuration)
+	2、选中项目，右击选择Team...-->share project-->git-->commit
+	3、推送到远程仓库
+		|--先在github创建好仓库
+		|--项目右击-->team-->remote push
+		|--填写相关信息，https，用户名和密码等
+
+项目开发流程：
+	1、搭建开发环境
+	2、分析项目涉及的实体类，分析关联关系，分别建立实体和表（数据模型）
+	3、项目结构规划（包划分）
+	4、Maven配置SSM（这里使用bom管理spring的版本，便于维护与升级）
+	5、单元测试（三层分别测试）
+	6、配置日志
+	
+基类	
+
+//spring-test与junit版本不兼容导致
+java.lang.Exception: No tests found matching [{ExactMatcher:fDisplayName=testQueryArea], {ExactMatcher:fDisplayName=testQueryArea(stu.ljx.o2o.dao.AreaTest)], {LeadingIdentifierMatcher:fClassName=stu.ljx.o2o.dao.AreaTest,fLeadingIdentifier=testQueryArea]] 
+from org.junit.internal.requests.ClassRequest@1996cd68
+	
+	
