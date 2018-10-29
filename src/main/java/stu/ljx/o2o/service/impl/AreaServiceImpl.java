@@ -15,6 +15,7 @@ public class AreaServiceImpl implements AreaService {
 	@Autowired
 	private AreaMapper areaMapper;
 	
+	/*获取所有区域*/
 	@Override
 	public List<Area> getAreaList() {
 		return areaMapper.queryArea();

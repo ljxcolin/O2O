@@ -112,5 +112,12 @@ public class Shop implements Serializable {
 	public void setShopCategory(ShopCategory shopCategory) {
 		this.shopCategory = shopCategory;
 	}
-	
+	@Override
+	public String toString() {
+		return "Shop [shopId=" + shopId + ", shopName=" + shopName + ", shopDesc=" + shopDesc + ", shopAddr=" + shopAddr
+				+ ", phone=" + phone + ", shopImg=" + shopImg + ", priority=" + priority + ", createTime=" + createTime
+				+ ", lastEditTime=" + lastEditTime + ", enableStatus=" + enableStatus + ", advice=" + advice
+				+ ", owner=" + owner + ", area=" + area + ", shopCategory=" + shopCategory + "]";
+	}
+
 }

@@ -2,17 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="stu.ljx.o2o.dao.AreaMapper">
 	<select id="queryArea" resultType="Area">
-		 select
+		SELECT
             area_id,
             area_name,
             area_desc,
             priority,
             create_time,
             last_edit_time
-        from
+        FROM
             tb_area
-        order by
-            priority desc
+        ORDER BY
+            priority DESC
 	</select>
 </mapper>
 

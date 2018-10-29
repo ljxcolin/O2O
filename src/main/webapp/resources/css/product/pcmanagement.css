@@ -1,0 +1,21 @@
+@charset "UTF-8";
+.list-block input[type=text], .list-block input[type=number] {
+	height: 25px;
+	background-color: #eee;
+}
+.row-product-category {
+    border: 2px solid #999;
+    border-bottom: none;
+    margin: 0 5px;
+    padding: .5rem;
+}
+.row-product-category:last-child {
+    border-bottom: 2px solid #999;
+}
+.info-item {
+	text-align: center;
+}
+.product-category-name {
+    white-space: nowrap;
+    overflow-x: scroll;
+}

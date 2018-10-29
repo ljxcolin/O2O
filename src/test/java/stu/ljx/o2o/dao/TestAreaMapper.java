@@ -1,4 +1,4 @@
-package stu.ljx.o2o.service;
+package stu.ljx.o2o.dao;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,15 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import stu.ljx.o2o.BaseTest;
 import stu.ljx.o2o.entity.Area;
 
-public class TestService extends BaseTest {
+public class TestAreaMapper extends BaseTest {
 
 	@Autowired
-	private AreaService areaService;
+	private AreaMapper areaMapper;
 	
 	@Test
-	public void testGetAreaList() {
-		List<Area> areaList = areaService.getAreaList();
+	public void testQueryArea() {
+		List<Area> areaList = areaMapper.queryArea();
+		assertEquals(2, areaList.size());
+		System.out.println(areaList.get(0));
 		assertEquals("上海", areaList.get(0).getAreaName());
 	}
-	
 }

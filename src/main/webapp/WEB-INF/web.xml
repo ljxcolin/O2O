@@ -2,6 +2,23 @@
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
     version="3.1" metadata-complete="true">
   <display-name>O2O</display-name>
+  <!-- 解决前端乱码 -->
+  <!-- <filter>
+  	<filter-name>SpringEncodingFilter</filter-name>
+  	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+  	<init-param>
+  		<param-name>encoding</param-name>
+  		<param-value>UTF-8</param-value>
+  	</init-param>
+  	<init-param>
+  		<param-name>forceEncoding</param-name>
+  		<param-value>true</param-value>
+  	</init-param>
+  </filter>
+  <filter-mapping>
+	<filter-name>SpringEncodingFilter</filter-name>
+	<url-pattern>/*</url-pattern>
+  </filter-mapping> -->
   <!-- 配置spring核心Servlet -->
   <servlet>
   	<servlet-name>spring-dispatcher</servlet-name>
@@ -14,5 +31,59 @@
   <servlet-mapping>
   	<servlet-name>spring-dispatcher</servlet-name>
   	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <!-- 配置验证码组件Kaptcha对应的servlet -->
+  <servlet>
+  	<servlet-name>Kaptcha</servlet-name>
+  	<servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+  	<!-- 边框 -->
+  	<init-param>
+  		<param-name>kaptcha.border</param-name>
+  		<param-value>no</param-value>
+  	</init-param>
+  	<!-- 图片宽度 -->
+  	<init-param>
+  		<param-name>kaptcha.image.width</param-name>
+  		<param-value>135</param-value>
+  	</init-param>
+  	<!-- 图片高度 -->
+  	<init-param>
+  		<param-name>kaptcha.image.height</param-name>
+  		<param-value>50</param-value>
+  	</init-param>
+  	<!-- 使用哪些字符生成验证码 -->
+  	<init-param>
+  		<param-name>kaptcha.textproducer.char.string</param-name>
+  		<param-value>0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</param-value>
+  	</init-param>
+  	<!-- 字符个数 -->
+  	<init-param>
+  		<param-name>kaptcha.textproducer.char.length</param-name>
+  		<param-value>4</param-value>
+  	</init-param>
+  	<!-- 干扰线颜色 -->
+  	<init-param>
+  		<param-name>kaptcha.noise.color</param-name>
+  		<param-value>black</param-value>
+  	</init-param>
+  	<!-- 字体颜色 -->
+  	<init-param>
+  		<param-name>kaptcha.textproducer.font.color</param-name>
+  		<param-value>red</param-value>
+  	</init-param>
+  	<!-- 字体大小 -->
+  	<init-param>
+  		<param-name>kaptcha.textproducer.font.size</param-name>
+  		<param-value>43</param-value>
+  	</init-param>
+  	<!-- 使用哪些字体 -->
+  	<init-param>
+  		<param-name>kaptcha.textproducer.font.names</param-name>
+  		<param-value>Arial</param-value>
+  	</init-param>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>Kaptcha</servlet-name>
+  	<url-pattern>/kaptcha</url-pattern>
   </servlet-mapping>
 </web-app>

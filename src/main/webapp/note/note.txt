@@ -32,11 +32,82 @@
 	4、Maven配置SSM（这里使用bom管理spring的版本，便于维护与升级）
 	5、单元测试（三层分别测试）
 	6、配置日志
+	7、按照优先级从高到低的顺序开发相应的模块，越是整个项目的基础优先级越高。
+	8、图片处理与封装Thumbnailator
+		图片处理方式：放到专门图片服务器或者在主机上单独划分目录去存储这些图片。数据库中的字段仅仅存放图片的地址。
+		工具类FileUtil+ImageUtil
+	9、DTO实现
+	10、商铺注册Service层实现（service层操作返回DTO类）
+	11、商铺注册Controller层实现（用到了jackson-databind，将前台传递过来的JSON对象转换为POJO类）
+	12、商铺注册View层前端页面实现
+	13、商铺注册View层前端页面初始化
+	14、商铺注册View层配置验证码kaptcha组件
+	15、商铺注册View层+Controller层之图片上传
+	16、商铺注册前后端联调验证整体功能模块
+	17、商铺编辑，DAO层实现
+	18、商铺编辑，Service层实现
+	19、商铺编辑，Controller层实现
+	20、商铺编辑，View层实现
+	21、商铺列表，DAO层实现（与16重复了）
+	22、商铺列表，Seriver层实现
+	23、商铺列表，Controller层实现
+	24、商铺列表，View层实现
+	25、商品类别列表展示从Dao到View层的开发
+	26、商品类别，批量新增商品类别从Dao到View层开发
+	27、商品类别，删除商品类别从Dao到View层的开发
 	
-基类	
+开发流程：，这里我们将类别管理这部分的内容从下至上来实现下吧。
+DAO(MAPPER)-->SERVICE-->WEB(CONTROLLER)-->VIEW
+基类（超类）
 
 //spring-test与junit版本不兼容导致
 java.lang.Exception: No tests found matching [{ExactMatcher:fDisplayName=testQueryArea], {ExactMatcher:fDisplayName=testQueryArea(stu.ljx.o2o.dao.AreaTest)], {LeadingIdentifierMatcher:fClassName=stu.ljx.o2o.dao.AreaTest,fLeadingIdentifier=testQueryArea]] 
 from org.junit.internal.requests.ClassRequest@1996cd68
-	
-	
+
+
+
+Spring默认情况下会对运行时异常(RuntimeException)进行事务回滚
+（1）注解@Transactional只能应用到 public方法才有效
+（2）在 Spring的 AOP代理下，只有目标方法由外部调用，目标方法才由Spring生成的代理对象来管理，这会造成自调用问题。
+若同一类中的其他没有@Transactional注解的方法内部调用有@Transactional注解的方法，
+有@Transactional注解的方法的事务被忽略，不会发生回滚。
+
+上面的两个问题@Transactional注解只应用到 public方法和自调用问题，是由于使用 Spring AOP代理造成的。
+为解决这两个问题，可以使用 AspectJ取代 SpringAOP代理
+
+在应用系统调用声明@Transactional的目标方法时，Spring Framework默认使用 AOP代理，
+在代码运行时生成一个代理对象，根据@Transactional的属性配置信息，这个代理对象决定该声明@Transactional
+的目标方法是否由拦截器 TransactionInterceptor来使用拦截，在 TransactionInterceptor拦截时，
+会在目标方法开始执行之前创建并加入事务，并执行目标方法的逻辑，最后根据执行情况是否出现异常，
+利用抽象事务管理器AbstractPlatformTransactionManager操作数据源DataSource提交或回滚事务
+
+public class CommonsMultipartFile implements MultipartFile, Serializable {
+
+因为统计的SQL和查询商铺列表的SQL中的where条件是相同的，所以这里我们使用SQL片段的方式，简化配置
+Sql中可将重复的sql提取出来，使用时用include引用即可，最终达到sql重用的目的
+注意：如果引用其它mapper.xml的sql片段，则在引用时需要加上namespace，如下：<include refid="namespace.sql片段”/>
+
+
+
+
+定义和用法
+disabled 属性规定禁用按钮。
+注释：disabled 属性无法与 <input type="hidden"> 一起使用。
+
+
+
+Junit 4.11里增加了指定测试方法执行顺序的特性 .
+测试类的执行顺序可通过对测试类添加注解@FixMethodOrder(value) 来指定,其中value 为执行顺序
+三种执行顺序可供选择：
+默认（MethodSorters.DEFAULT）,
+默认顺序由方法名hashcode值来决定，如果hash值大小一致，则按名字的字典顺序确定
+由于hashcode的生成和操作系统相关
+(以native修饰），所以对于不同操作系统，可能会出现不一样的执行顺序，在某一操作系统上，多次执行的顺序不变
+
+按方法名（ MethodSorters.NAME_ASCENDING）【推荐】,
+按方法名称的进行排序，由于是按字符的字典顺序，所以以这种方式指定执行顺序会始终保持一致；
+不过这种方式需要对测试方法有一定的命名规则，如 测试方法均以testNNN开头（NNN表示测试方法序列号 001-999）
+
+JVM（MethodSorters.JVM）
+按JVM返回的方法名的顺序执行，此种方式下测试方法的执行顺序是不可预测的，即每次运行的顺序可能都不一样
+

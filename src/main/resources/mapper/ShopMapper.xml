@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="stu.ljx.o2o.dao.ShopMapper">
+	<!-- 0注册商铺0 -->
+	<insert id="insertShop" useGeneratedKeys="true" keyColumn="shop_id" keyProperty="shopId">
+		INSERT into tb_shop (
+			owner_id,
+			area_id,
+			shop_category_id,
+			shop_name,
+			shop_desc,
+			shop_addr,
+			phone,
+			shop_img,
+			priority,
+			create_time,
+			last_edit_time,
+			enable_status,
+			advice)
+		VALUES (
+			#{owner.userId},
+			#{area.areaId},
+			#{shopCategory.shopCategoryId},
+			#{shopName},
+			#{shopDesc},
+			#{shopAddr},
+			#{phone},
+			#{shopImg},
+			#{priority},
+			#{createTime},
+			#{lastEditTime},
+			#{enableStatus},
+			#{advice});
+	</insert>
+	
+	<!-- 1更新商铺1 -->
+	<update id="updateShop">
+		UPDATE tb_shop
+		<set>
+			<if test="area != null">area_id = #{area.areaId},</if>
+			<if test="shopCategory != null">shop_category_id = #{shopCategory.shopCategoryId},</if>
+			<if test="shopName != null">shop_name = #{shopName},</if>
+			<if test="shopDesc != null">shop_desc = #{shopDesc},</if>
+			<if test="shopAddr != null">shop_addr = #{shopAddr},</if>
+			<if test="phone != null">phone = #{phone},</if>
+			<if test="shopImg != null">shop_img = #{shopImg},</if>
+			<if test="priority != null">priority = #{priority},</if>
+			<if test="lastEditTime != null">last_edit_time = #{lastEditTime},</if>
+			<if test="enableStatus != null">enable_status = #{enableStatus},</if>
+			<if test="advice != null">advice = #{advice}</if>
+		</set>
+		WHERE shop_id = #{shopId}
+	</update>
+
+	<!-- 2查询符合条件的商铺列表2 -->
+	<!-- 查询条件：商铺名称（模糊）、所属区域、商铺类别、商铺状态、商铺拥有者 -->
+	<sql id="queryShopByCnd">
+		<!-- 商铺名称（模糊查询） -->
+		<if test="shopCnd.shopName != null and '' != shopCnd.shopName">
+			and s.shop_name like '%${shopCnd.shopName}%'
+		</if>
+		<!-- 所属区域 -->
+		<if test="shopCnd.area != null and shopCnd.area.areaId != null">
+			and s.area_id = #{shopCnd.area.areaId}
+		</if>
+		<!-- 商铺类别 -->
+		<if test="shopCnd.shopCategory != null and shopCnd.shopCategory.shopCategoryId != null">
+			and s.shop_category_id = #{shopCnd.shopCategory.shopCategoryId}
+		</if>
+		<!-- 商铺状态 -->
+		<if test="shopCnd.enableStatus != null">
+			and s.enable_status = #{shopCnd.enableStatus}
+		</if>
+		<!-- 商铺拥有者 -->
+		<if test="shopCnd.owner != null and shopCnd.owner.userId != null">
+			and s.owner_id = #{shopCnd.owner.userId}
+		</if>
+	</sql>
+	<resultMap type="Shop" id="shopMap">
+		<id property="shopId" column="shop_id"/>
+		<result property="shopName" column="shop_name"/>
+		<result property="shopDesc" column="shop_desc"/>
+		<result property="shopAddr" column="shop_addr"/>
+		<result property="phone" column="phone"/>
+		<result property="shopImg" column="shop_img"/>
+		<result property="priority" column="priority"/>
+		<result property="createTime" column="create_time"/>
+		<result property="lastEditTime" column="last_edit_time"/>
+		<result property="enableStatus" column="enable_status"/>
+		<result property="advice" column="adivce"/>
+		<!-- 关联一的一方，association中column表示对应的外键 -->
+		<association property="owner" column="owner_id" javaType="User">
+			<id property="userId" column="user_id"/>
+			<result property="name" column="name"/>
+		</association>
+		<association property="area" column="area_id" javaType="Area">
+			<id property="areaId" column="area_id"/>
+			<result property="areaName" column="area_name"/>
+		</association>
+		<association property="shopCategory" column="shop_category_id" javaType="ShopCategory">
+			<id property="shopCategoryId" column="shop_category_id"/>
+			<result property="shopCategoryName" column="shop_category_name"/>
+		</association>
+	</resultMap>
+	<select id="queryShop" resultType="Shop" resultMap="shopMap">
+		SELECT
+            s.shop_id,
+            s.shop_name,
+            s.shop_desc,
+            s.shop_addr,
+            s.phone,
+            s.shop_img,
+            s.priority,
+            s.create_time,
+            s.last_edit_time,
+            s.enable_status,
+            s.advice,
+            u.user_id,
+            u.name,
+            a.area_id,
+            a.area_name,
+            sc.shop_category_id,
+            sc.shop_category_name
+        FROM
+            tb_shop s,
+            tb_user u,
+            tb_area a,
+            tb_shop_category sc
+        <where>
+            <include refid="queryShopByCnd"/>
+        </where>
+        AND s.owner_id = u.user_id
+        AND s.area_id = a.area_id
+        AND s.shop_category_id = sc.shop_category_id
+        ORDER BY s.priority DESC
+        LIMIT #{rowIndex} , #{pageSize}
+	</select>
+	<!-- 3查询符合条件的商铺的数量3 -->
+	<select id="countShop" resultType="Integer">
+		SELECT
+            count(1)
+        FROM       	
+            tb_shop s,
+            tb_user u,
+            tb_area a,
+            tb_shop_category sc
+        <where>
+            <include refid="queryShopByCnd"/>
+        </where>
+        AND s.owner_id = u.user_id
+        AND s.area_id = a.area_id
+        AND s.shop_category_id = sc.shop_category_id
+	</select>
+	<!-- 4获取指定ID的商铺4 -->
+	<select id="getShopById" parameterType="Integer" resultType="Shop" resultMap="shopMap">
+		SELECT
+            s.shop_id,
+            s.shop_name,
+            s.shop_desc,
+            s.shop_addr,
+            s.phone,
+            s.shop_img,
+            s.priority,
+            s.create_time,
+            s.last_edit_time,
+            s.enable_status,
+            s.advice,
+            u.user_id,
+            u.name,
+            a.area_id,
+            a.area_name,
+            sc.shop_category_id,
+            sc.shop_category_name
+        FROM
+            tb_shop s,
+            tb_user u,
+            tb_area a,
+            tb_shop_category sc
+        WHERE s.shop_id = #{shopId}
+        AND s.owner_id = u.user_id
+        AND s.area_id = a.area_id
+        AND s.shop_category_id = sc.shop_category_id
+	</select>
+</mapper>
+
