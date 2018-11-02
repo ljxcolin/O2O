@@ -14,6 +14,7 @@ public class ProductImg implements Serializable {
 	private Date createTime;
 	/*商品图片所属商品*/
 	private Integer productId;
+	
 	public Integer getProductImgId() {
 		return productImgId;
 	}

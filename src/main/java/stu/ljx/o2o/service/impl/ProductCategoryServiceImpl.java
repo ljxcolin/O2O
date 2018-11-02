@@ -64,7 +64,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
                 return new ProductCategoryExecution(ProductCategoryStateEnum.FAILED);
             }
         } catch (Exception e) {
-            throw new ProductException(e.getMessage());
+            throw new ProductException("系统异常");
         }
 	}
 	

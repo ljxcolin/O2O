@@ -15,7 +15,7 @@ import stu.ljx.o2o.BaseTest;
 import stu.ljx.o2o.entity.ProductCategory;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestProductCategory extends BaseTest {
+public class TestProductCategoryMapper extends BaseTest {
 	
 	@Autowired
 	private ProductCategoryMapper productCategoryMapper;

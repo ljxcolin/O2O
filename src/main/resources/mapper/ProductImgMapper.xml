@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="stu.ljx.o2o.dao.ProductImgMapper">
+	<!-- 批量添加商品详情图片 -->
+	<insert id="batchInsertProductImg" parameterType="java.util.Set" useGeneratedKeys="true" keyProperty="productImgId" keyColumn="product_img_id">
+		INSERT INTO
+            tb_product_img (     
+                img_addr,
+                img_desc,
+                priority,
+                create_time,
+                product_id )
+        VALUES
+		<foreach collection="collection" item="productImg" separator=",">
+			(#{productImg.imgAddr},
+			#{productImg.imgDesc},
+			#{productImg.priority},
+			#{productImg.createTime},
+			#{productImg.productId})
+		</foreach>
+	</insert>
+</mapper>
+

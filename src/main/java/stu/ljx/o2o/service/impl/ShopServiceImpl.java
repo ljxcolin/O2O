@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import stu.ljx.o2o.dao.ShopMapper;
+import stu.ljx.o2o.dto.ImageHolder;
 import stu.ljx.o2o.dto.ShopExecution;
 import stu.ljx.o2o.entity.Shop;
 import stu.ljx.o2o.enums.ShopStateEnum;
@@ -83,7 +84,7 @@ public class ShopServiceImpl implements ShopService {
 		//根据shopId获得商铺图片的相对目录
 		String shopImgPath = FileUtil.getShopImgPath(shop.getShopId());
 		//生成水印图片
-		String relativePath = ImageUtil.generateThumbnail(shopImgIns, shopImgPath, shopImgName);
+		String relativePath = ImageUtil.generateThumbnail(new ImageHolder(shopImgIns, shopImgName), shopImgPath);
 		//将商铺图片的相对路径设置到shop的shopImg属性中，用于更新数据库shop_img字段
 		shop.setShopImg(relativePath);
 	}

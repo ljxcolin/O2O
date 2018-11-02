@@ -22,7 +22,7 @@ public class Product implements Serializable {
 	private Integer enableStatus;
 	
 	/*关联商品图片详情（一对多）*/
-	private Set<ProductImg> productImgList;
+	private Set<ProductImg> productImgSet;
 	/*关联商品所属类别（一对一）*/
 	private ProductCategory productCategory;
 	/*关联所属店铺*/
@@ -89,10 +89,10 @@ public class Product implements Serializable {
 		this.enableStatus = enableStatus;
 	}
 	public Set<ProductImg> getProductImgList() {
-		return productImgList;
+		return productImgSet;
 	}
-	public void setProductImgList(Set<ProductImg> productImgList) {
-		this.productImgList = productImgList;
+	public void setProductImgList(Set<ProductImg> productImgSet) {
+		this.productImgSet = productImgSet;
 	}
 	public ProductCategory getProductCategory() {
 		return productCategory;
@@ -111,7 +111,7 @@ public class Product implements Serializable {
 		return "Product [productId=" + productId + ", productName=" + productName + ", productDesc=" + productDesc
 				+ ", imgAddr=" + imgAddr + ", normalPrice=" + normalPrice + ", promotionPrice=" + promotionPrice
 				+ ", priority=" + priority + ", createTime=" + createTime + ", lastEditTime=" + lastEditTime
-				+ ", enableStatus=" + enableStatus + ", productImgList=" + productImgList + ", productCategory="
+				+ ", enableStatus=" + enableStatus + ", productImgSet=" + productImgSet + ", productCategory="
 				+ productCategory + ", shop=" + shop + "]";
 	}
 

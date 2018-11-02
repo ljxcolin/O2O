@@ -49,6 +49,25 @@ public class FileUtil {
 	}
 	
 	/**
+	 * 获取指定商铺指定商品及其详情的图片的实际目录
+	 * 商品的图片根据商铺ID和商品ID划分，商铺和商品不同，其图片位于其对于的ID目录下
+	 * 商品图片最终路径为rootPath+productImgPath
+	 * @param shopId
+	 * @return
+	 */
+	public static String getProductImgPath(Integer shopId, Integer productId) {
+		if((shopId != null && shopId > 0) && (productId != null && productId > 0)) {
+			String shopImgPath = getShopImgPath(shopId);
+			String productImgPath = shopImgPath + "product_" +productId + "/";
+			productImgPath = productImgPath.replace("/", FileUtil.separator);
+			logger.debug("productImgPath={}", productImgPath);
+			return productImgPath;
+		}
+		logger.info("The shop or the product doesn't exist!");
+		return null;
+	}
+	
+	/**
 	 * 获取水印文件
 	 * @return
 	 */

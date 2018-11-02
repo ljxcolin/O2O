@@ -21,6 +21,7 @@ import stu.ljx.o2o.entity.Shop;
 import stu.ljx.o2o.enums.ProductCategoryStateEnum;
 import stu.ljx.o2o.exception.ProductException;
 import stu.ljx.o2o.service.ProductCategoryService;
+import stu.ljx.o2o.util.SessionUtil;
 
 @Controller
 @RequestMapping("/product/category")
@@ -42,7 +43,7 @@ public class ProductCategoryController {
         ProductCategoryStateEnum pcse = null;
 		try {
 			//从session中获取当前商铺，出于安全考虑，不依赖前端传入
-			Shop currentShop = (Shop) request.getSession().getAttribute("currentShop");
+			Shop currentShop = SessionUtil.getCurrentShop(request);
 			if(currentShop != null && currentShop.getShopId() != null) {
 				productCategories = productCategoryService.getProductCategories(currentShop.getShopId());
 				return new Result<List<ProductCategory>>(true, productCategories);
@@ -68,7 +69,7 @@ public class ProductCategoryController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		if (productCategories != null && productCategories.size() > 0) {
 			//从session中获取shop的信息
-			Shop currentShop = (Shop) request.getSession().getAttribute("currentShop");
+			Shop currentShop = SessionUtil.getCurrentShop(request);
 			if (currentShop != null && currentShop.getShopId() != null) {
 				//为商品类别设置createTime/lastEditTime/shopId
 				Date createTime = new Date();
@@ -103,5 +104,45 @@ public class ProductCategoryController {
 		}
 		return modelMap;
 	}
+	
+	/**
+	 * 删除指定的商品类别
+	 * @param productCategoryId
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> removeProductCategory(Integer productCategoryId, HttpServletRequest request) {
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        if (productCategoryId != null && productCategoryId > 0) {
+            //从session中获取shop的信息
+            Shop currentShop = SessionUtil.getCurrentShop(request);
+            if (currentShop != null && currentShop.getShopId() != null) {
+                try {
+                    //删除商品类别
+                    Integer shopId = currentShop.getShopId();
+                    ProductCategoryExecution pce = productCategoryService.deleteProductCategory(productCategoryId, shopId);
+                    if (pce.getState() == ProductCategoryStateEnum.SUCCESS.getState()) {
+                        modelMap.put("success", true);
+                    } else {
+                        modelMap.put("success", false);
+                        modelMap.put("errMsg", pce.getStateInfo());
+                    }
+                } catch (ProductException e) {
+                    e.printStackTrace();
+                    modelMap.put("success", false);
+                    modelMap.put("errMsg", e.getMessage());
+                }
+            } else {
+                modelMap.put("success", false);
+                modelMap.put("errMsg", ProductCategoryStateEnum.NULL_SHOP.getStateInfo());
+            }
+        } else {
+            modelMap.put("success", false);
+            modelMap.put("errMsg", "请选择商品类别");
+        }
+        return modelMap;
+    }
 	
 }

@@ -24,4 +24,5 @@ public interface ProductCategoryMapper {
 	 * @return
 	 */
 	int deleteProductCategory(@Param("productCategoryId")Integer productCategoryId, @Param("shopId")Integer shopId);
+
 }

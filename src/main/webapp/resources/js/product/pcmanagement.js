@@ -8,6 +8,7 @@ $(function () {
 	
 	var getPcByShopIdUrl = '/o2o/product/category/getpcbyshopid';
 	var batchAddUrl = '/o2o/product/category/batchadd';
+	var removePcUrl = '/o2o/product/category/remove';
 	
 	//加载商品类别列表
 	getProductCategories();
@@ -24,10 +25,13 @@ $(function () {
 	                                + item.productCategoryName
 	                                + '</div><div class="col-25 info-item">'
 	                                + item.priority
-	                                + '</div><div class="col-40 info-item">'
+	                                + '</div><div class="col-20 info-item">'
 	                                + '<a href="javascript:void(0)" class="button delete" data-id="'
 	                                + item.productCategoryId
-	                                + '">删除</a></div></div>';
+	                                + '">删除</a></div><div class="col-20 info-item">'
+	                                + '<input type="checkbox" data-id="'
+	                                + item.productCategoryId
+	                                + '"/></div></div>';
 	            });
 	            $('.product-categroy-wrap').html(productCategoriesHtml);
 	        }
@@ -78,5 +82,33 @@ $(function () {
             }
         });
         return false; //阻止a标签跳转
-    });    
+    });
+    
+    //删除商品类别点击事件
+    //一种是需要提交到后台的删除.now，另外一种是 新增但未提交到数据库中的删除 temp
+    //删除.now
+    $('.product-categroy-wrap').on('click', '.now .delete', function(e) {
+    	var target = e.currentTarget;
+    	$.confirm('确定删除?', function() {
+    		$.ajax({
+    			url: removePcUrl,
+    			type: 'POST',
+    			data: {productCategoryId: target.dataset.id},
+    			dataType: 'json',
+    			success: function(data) {
+    				if (data.success) {
+    					$.toast('删除成功');
+    					//重新加载数据
+    					getProductCategories();
+    				} else {
+    					$.toast(data.errMsg + '，删除失败');
+    				}
+    			}
+    		});
+    	});
+    });
+    //删除.temp
+    $('.product-categroy-wrap').on('click', '.temp .delete', function(e) {
+    	$(this).parent().parent().remove();
+    });
 });

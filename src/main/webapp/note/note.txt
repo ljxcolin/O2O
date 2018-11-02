@@ -55,6 +55,11 @@
 	25、商品类别列表展示从Dao到View层的开发
 	26、商品类别，批量新增商品类别从Dao到View层开发
 	27、商品类别，删除商品类别从Dao到View层的开发
+	28、商品添加DAO层开发
+	29、商品添加Service层开发与重构
+	30、商品添加Controller层开发
+	31、商品添加View层实现
+	
 	
 开发流程：，这里我们将类别管理这部分的内容从下至上来实现下吧。
 DAO(MAPPER)-->SERVICE-->WEB(CONTROLLER)-->VIEW
@@ -110,4 +115,33 @@ Junit 4.11里增加了指定测试方法执行顺序的特性 .
 
 JVM（MethodSorters.JVM）
 按JVM返回的方法名的顺序执行，此种方式下测试方法的执行顺序是不可预测的，即每次运行的顺序可能都不一样
+
+//原因因为使用了@Param("set")注解，keyProperty需声明为set.productImgId
+int batchInsertProductImg(@Param("set")Set<ProductImg> productImgSet);
+<insert id="batchInsertProductImg" parameterType="ProductImg" useGeneratedKeys="true" keyProperty="productImgId" keyColumn="product_img_id">
+org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.executor.ExecutorException: Error getting generated key or setting result to parameter object. Cause: org.apache.ibatis.binding.BindingException: Parameter 'productImgId' not found. Available parameters are [set, param1]
+Caused by: org.apache.ibatis.executor.ExecutorException: Error getting generated key or setting result to parameter object. Cause: org.apache.ibatis.binding.BindingException: Parameter 'productImgId' not found. Available parameters are [set, param1]
+
+org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.binding.BindingException: Parameter 'colletion' not found.
+ Available parameters are [collection, list]
+
+mybatis当方法入参为集合类型（List/Set）时，parameterType可写泛型可以直接写java.util.List/java.util.Set
+其实这时候parameterType相当于没作用
+
+useGeneratedKeys="true"表示将自增列作为主键且将其设回List的泛型对象中
+当mybatis入参为Set类型时，不使用@Param且使用"collection"作为key，使用useGeneratedKeys可以正常将keyProperty写为对象的属性
+
+异常处理经验总结
+非空判断尽量放在Service层
+与页面相关的判断才放在Controller层
+
+Controller层与Service不要出现重复的判断
+
+异常的两个方法的区别
+getMessage:获取异常消息
+toString: 类名+异常信息
+
+
+
+
 

@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import stu.ljx.o2o.dto.ImageHolder;
+
 //import net.coobird.thumbnailator.Thumbnails;
 //import net.coobird.thumbnailator.geometry.Positions;
 
@@ -32,7 +34,7 @@ public class TestUtil {
 		FileInputStream ins = null;
 		try {
 			ins = new FileInputStream(sourceFile);
-			ImageUtil.generateThumbnail(ins, "\\", sourceFile.getName());
+			ImageUtil.generateThumbnail(new ImageHolder(ins, sourceFile.getName()), "\\");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException("创建缩略图失败：" + e.toString());
