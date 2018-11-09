@@ -75,6 +75,14 @@
 		<if test="shopCnd.owner != null and shopCnd.owner.userId != null">
 			and s.owner_id = #{shopCnd.owner.userId}
 		</if>
+		<!-- 用户选择一级商铺类别时，列出该大类下面的全部商店，以parent_id来筛选 -->
+        <if test="shopCnd.shopCategory != null and shopCnd.shopCategory.parent != null
+            and shopCnd.shopCategory.parent.shopCategoryId != null">
+            and s.shop_category_id in (
+                select shop_category_id from tb_shop_category
+				where parent_id = #{shopCnd.shopCategory.parent.shopCategoryId}
+			)
+        </if>
 	</sql>
 	<resultMap type="Shop" id="shopMap">
 		<id property="shopId" column="shop_id"/>

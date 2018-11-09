@@ -30,25 +30,25 @@ public class AreaController {
 		/*0日志测试0*/
 		logger.info("############ GetAreas Begin ############");
 		Long beginTime = System.currentTimeMillis();
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> modelMap = new HashMap<String, Object>();
 		List<Area> areaList = null;
 		try {
 			areaList = areaService.getAreaList();
-			map.put("count", areaList.size());
-			map.put("area", areaList);
-			for (Area area : areaList) {
+			modelMap.put("count", areaList.size());
+			modelMap.put("area", areaList);
+			/*for (Area area : areaList) {
 				System.out.println("area:" + area.getAreaName());
-			}
+			}*/
 		}catch (Exception e) {
 			e.printStackTrace();
-			map.put("success", false);
-			map.put("errMsg", e.getMessage());
+			modelMap.put("success", false);
+			modelMap.put("errMsg", "系统异常");
 			logger.error("Exception Happens , desc [{}] ", e.getMessage());
 		}
 		Long endTime = System.currentTimeMillis();
 		logger.debug("cost [{}ms]", endTime - beginTime);
 		logger.info("############ GetAreas End ############");
-		return map;
+		return modelMap;
 	}
 	
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd ">
+	
+	<!-- redis连接池设置 -->
+    <bean name="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!-- 一个池子中最大可用连接数（jedis实例） -->
+        <property name="maxTotal" value="${redis.pool.maxTotal}"/>
+        <!-- 连接池中最多可空闲 maxnamele个连接 -->
+        <property name="maxIdle" value="${redis.pool.maxIdle}"/>
+        <!-- 连接池中至少空闲 minnamele个连接 -->
+        <property name="minIdle" value="${redis.pool.minIdle}"/>
+        <!-- 最大等待时间，当没有可用连接时，连接池等待连接被归还的最大时间（单位为毫秒）, 超时则抛出异常 -->
+        <property name="maxWaitMillis" value="${redis.pool.maxWaitMillis}"/>
+        <!-- 在获取连接时，检查连接有效性 -->
+        <property name="testOnBorrow" value="${redis.pool.testOnBorrow}"/>
+    </bean>
+    
+    <!-- redis连接池 -->
+    <bean name="jedisPool" class="redis.clients.jedis.JedisPool">
+    	<constructor-arg index="0" ref="jedisPoolConfig"/>
+        <constructor-arg index="1" value="${redis.host}" type="java.lang.String"/>
+        <constructor-arg index="2" value="${redis.port}" type="int"/>
+    </bean>
+    
+    <!-- 创建redis的工具类，封装好Redis的连接以进行相关的操作 -->
+    <bean name="jedisKit" class="stu.ljx.o2o.cache.JedisKit" scope="singleton">
+        <property name="jedisPool" ref="jedisPool"/>
+    </bean>
+
+	<!-- 创建redis工具类的一些内部类 -->
+    <bean name="jedisKeys" class="stu.ljx.o2o.cache.JedisKit$Keys" scope="singleton"/>
+    <bean name="jedisStrings" class="stu.ljx.o2o.cache.JedisKit$Strings" scope="singleton"/>
+    <bean name="jedisHash" class="stu.ljx.o2o.cache.JedisKit$Hash" scope="singleton"/>
+    <bean name="jedisLists" class="stu.ljx.o2o.cache.JedisKit$Lists" scope="singleton"/>
+    <bean name="jedisSets" class="stu.ljx.o2o.cache.JedisKit$Sets" scope="singleton"/>
+    <!-- <bean name="jedisHash" class="stu.ljx.o2o.cache.JedisKit$Hash" scope="singleton">
+        <constructor-arg ref="JedisKit"/>
+    </bean> -->
+</beans>

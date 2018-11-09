@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import stu.ljx.o2o.dao.ProductCategoryMapper;
+import stu.ljx.o2o.dao.ProductMapper;
 import stu.ljx.o2o.dto.ProductCategoryExecution;
 import stu.ljx.o2o.entity.ProductCategory;
 import stu.ljx.o2o.enums.ProductCategoryStateEnum;
@@ -24,6 +25,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 	
 	@Autowired
 	private ProductCategoryMapper productCategoryMapper;
+	@Autowired
+	private ProductMapper productMapper;
 	
 	@Override
 	public List<ProductCategory> getProductCategories(Integer shopId) {
@@ -55,16 +58,22 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 	@Override
 	@Transactional(isolation=Isolation.REPEATABLE_READ,propagation=Propagation.REQUIRED,readOnly=false)
 	public ProductCategoryExecution deleteProductCategory(Integer productCategoryId, Integer shopId) {
+		int row = 0;
 		try {
-			//直接删除商品类别
-            int row = productCategoryMapper.deleteProductCategory(productCategoryId, shopId);
+			//Step1：解除商品与将被删除的商品类别的关系
+			row = productMapper.updateProductCategoryToNull(productCategoryId, shopId);
+			if(row < 0) {
+				throw new ProductException("商品与该类别关系解除失败");
+			}
+			//Step2：直接删除商品类别
+            row = productCategoryMapper.deleteProductCategory(productCategoryId, shopId);
             if (row > 0) {
                 return new ProductCategoryExecution(ProductCategoryStateEnum.SUCCESS);
             } else {
                 return new ProductCategoryExecution(ProductCategoryStateEnum.FAILED);
             }
         } catch (Exception e) {
-            throw new ProductException("系统异常");
+            throw new ProductException(e.getMessage());
         }
 	}
 	

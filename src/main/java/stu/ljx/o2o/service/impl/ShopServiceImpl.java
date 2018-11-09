@@ -40,7 +40,7 @@ public class ShopServiceImpl implements ShopService {
 	 */
 	@Override
 	@Transactional(isolation=Isolation.REPEATABLE_READ,propagation=Propagation.REQUIRED,readOnly=false)
-	public ShopExecution addShop(Shop shop, InputStream shopImgIns, String shopImgName) {
+	public ShopExecution addShop(Shop shop, InputStream shopImgIns, String shopImgName) throws ShopException{
 		//一般性非空判断
 		if(shop == null) {
 			return new ShopExecution(ShopStateEnum.NULL_SHOP_INFO);

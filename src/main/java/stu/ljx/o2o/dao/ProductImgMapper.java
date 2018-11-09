@@ -14,4 +14,14 @@ public interface ProductImgMapper {
 	 */
 	int batchInsertProductImg(Set<ProductImg> productImgSet);
 	
+	/**
+	 * 批量更新商品详情图片
+	 * @param productImgSet
+	 * @return
+	 */
+	int batchUpdateProductImg(Set<ProductImg> productImgSet);
+	
+	int deleteProductImgById(Integer productId);
+	
+	
 }

@@ -157,4 +157,18 @@ public class TestShopMapper extends BaseTest {
 		System.out.println(shop);
 	}
 	
+	@Test
+	public void testQueryAandCountShopPlus() {
+		Shop shopCnd = new Shop();
+		ShopCategory shopCategory = new ShopCategory();
+		ShopCategory parent = new ShopCategory();
+		parent.setShopCategoryId(1);
+		shopCategory.setParent(parent);
+		shopCnd.setShopCategory(shopCategory);
+		List<Shop> shopList = shopMapper.queryShop(shopCnd, 0, 5);
+		int count = shopMapper.countShop(shopCnd);
+		assertEquals(3, shopList.size());
+		assertEquals(3, count);
+	}
+	
 }

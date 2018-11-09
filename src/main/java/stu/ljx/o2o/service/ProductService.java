@@ -23,5 +23,27 @@ public interface ProductService {
 	 * @throws ProductException 商品操作异常类
 	 */
 	ProductExecution addProduct(Product product, ImageHolder productImg, Set<ImageHolder> productDetailImgs) throws ProductException;
+	
+	/**
+	 * 获取商品列表
+	 * @param productCnd
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
+	ProductExecution getProductList(Product productCnd, int pageIndex, int pageSize);
+	
+	/**
+	 * 获取指定ID的商品
+	 * @param productId
+	 * @return
+	 */
+	Product getProductById(Integer productId);
 
+	/* 修改商品 */
+	ProductExecution editProduct(Product product, ImageHolder productImg, Set<ImageHolder> productDetailImgs) throws ProductException;
+	
+	/* 上架或下架商品 */
+	ProductExecution changeProductStatus(Product product);
+	
 }

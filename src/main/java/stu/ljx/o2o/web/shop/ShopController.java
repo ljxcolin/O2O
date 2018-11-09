@@ -54,7 +54,10 @@ public class ShopController {
 		List<ShopCategory> shopCategoryList = null;
 		List<Area> areaList = null;
 		try {
-			shopCategoryList = shopCategoryService.getShopCategoryList(new ShopCategory());
+			ShopCategory shopCategory = new ShopCategory();
+			ShopCategory parent = new ShopCategory();
+			shopCategory.setParent(parent);
+			shopCategoryList = shopCategoryService.getShopCategoryList(shopCategory);
 			areaList = areaService.getAreaList();
 			modelMap.put("success", true);
 			modelMap.put("shopCategoryList", shopCategoryList);

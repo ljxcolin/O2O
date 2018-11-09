@@ -49,7 +49,7 @@
   	<!-- 图片高度 -->
   	<init-param>
   		<param-name>kaptcha.image.height</param-name>
-  		<param-value>50</param-value>
+  		<param-value>45</param-value>
   	</init-param>
   	<!-- 使用哪些字符生成验证码 -->
   	<init-param>

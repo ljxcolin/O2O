@@ -16,7 +16,7 @@ public class ProductExecution {
 	private int count;
 	/*单一商品，增删改时用*/
 	private Product product;
-	/*多个商铺，查询列表时用*/
+	/*多个商品，查询列表时用*/
 	private List<Product> productList;
 	
 	/*无参构造*/
@@ -24,20 +24,20 @@ public class ProductExecution {
 		super();
 	}
 	
-	/*商铺操作失败时使用*/
+	/*商品操作失败时使用*/
 	public ProductExecution(ProductStateEnum productStateEnum) {
 		this.state = productStateEnum.getState();
 		this.stateInfo = productStateEnum.getStateInfo();
 	}
 	
-	/*增删改商铺操作成功时使用*/
+	/*增删改商品操作成功时使用*/
 	public ProductExecution(ProductStateEnum productStateEnum, Product product) {
 		this.state = productStateEnum.getState();
 		this.stateInfo = productStateEnum.getStateInfo();
 		this.product = product;
 	}
 	
-	/*查询商铺列表操作成功时使用*/
+	/*查询商品列表操作成功时使用*/
 	public ProductExecution(ProductStateEnum productStateEnum, List<Product> productList, int count) {
 		this.state = productStateEnum.getState();
 		this.stateInfo = productStateEnum.getStateInfo();

@@ -21,9 +21,9 @@ public class FileUtil {
 		logger.debug("os.name={}", os);
 		String rootPath = null;
 		if(os.toLowerCase().startsWith("win")) { //Windows
-			rootPath = "E:/STSFile/upload/o2o/images";
+			rootPath = "E:/ItemFile/o2o";
 		}else { //Unix/Linux
-			rootPath = "/home/colin/o2o/images";
+			rootPath = "/home/colin/o2o";
 		}
 		rootPath = rootPath.replace("/", FileUtil.separator); //replace separator
 		logger.debug("rootPath={}", rootPath);
@@ -39,7 +39,7 @@ public class FileUtil {
 	 */
 	public static String getShopImgPath(Integer shopId) {
 		if(shopId != null && shopId > 0) {
-			String shopImgPath = "/shopImage/" + shopId + "/";
+			String shopImgPath = "/upload/shopImage/" + shopId + "/";
 			shopImgPath = shopImgPath.replace("/", FileUtil.separator);
 			logger.debug("shopImgPath={}", shopImgPath);
 			return shopImgPath;

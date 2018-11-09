@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>商品类别</title>
 <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-<link rel="shortcut icon" href="/o2o/favicon.ico">
+<!-- <link rel="shortcut icon" href="/o2o/favicon.ico"> -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
@@ -14,39 +14,43 @@
 <link rel="stylesheet" href="/o2o/resources/css/product/pcmanagement.css"> 
 </head>
 <body>
-    <header class="bar bar-nav">
-        <h1 class="title">商品类别管理</h1>
-    </header>
-    <div class="content">
-        <div class="list-block">
-            <div class="row row-product-category">
-                <div class="col-33 info-item">商品类别</div>
-                <div class="col-25 info-item">优先级</div>
-                <div class="col-20 info-item">操作</div>
-                <div class="col-20 info-item">选择</div>
-            </div>
-            <!-- 通过js从后台加载数据，动态的添加内容 -->
-            <div class="product-categroy-wrap"></div>
-        </div>
-
-        <!-- 预占两个按钮，后续完善 -->
-        <div class="content-block">
-            <div class="row row-button">
-                <div class="col-50">
-                    <a href="" class="button button-big button-fill button-success" id="new">新增</a>
-                </div>
-                <div class="col-50">
-                    <a href="" class="button button-big button-fill" id="submit">提交</a>
-                </div>
-            </div>
-            <div class="row row-button">
-                <div class="col-50">
-                    <a href="" class="button button-big button-fill button-warning" id="select-all">全选或反选</a>
-                </div>
-                <div class="col-50">
-                    <a href="" class="button button-big button-fill button-danger" id="batch-delete">批量删除</a>
-                </div>
-            </div>
+	<div class="page-group">
+		<div id="page-label-input" class="page">
+		    <header class="bar bar-nav">
+		        <h1 class="title">商品类别管理</h1>
+		    </header>
+		    <div class="content">
+		        <div class="list-block">
+		            <div class="row row-product-category">
+		                <div class="col-33 info-item">商品类别</div>
+		                <div class="col-25 info-item">优先级</div>
+		                <div class="col-20 info-item">操作</div>
+		                <div class="col-20 info-item">选择</div>
+		            </div>
+		            <!-- 通过js从后台加载数据，动态的添加内容 -->
+		            <div class="product-categroy-wrap"></div>
+		        </div>
+		
+		        <!-- 预占两个按钮，后续完善 -->
+		        <div class="content-block">
+		            <div class="row row-button">
+		                <div class="col-50">
+		                    <a href="" class="button button-big button-fill button-success" id="new">新增</a>
+		                </div>
+		                <div class="col-50">
+		                    <a href="" class="button button-big button-fill" id="submit">提交</a>
+		                </div>
+		            </div>
+		            <div class="row row-button">
+		                <div class="col-50">
+		                    <a href="" class="button button-big button-fill button-warning" id="select-all">全选或反选</a>
+		                </div>
+		                <div class="col-50">
+		                    <a href="" class="button button-big button-fill button-danger" id="batch-delete">批量删除</a>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
         </div>
     </div>
 

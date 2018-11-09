@@ -7,7 +7,7 @@ package stu.ljx.o2o.util;
  */
 public class PageUtil {
 	
-	public static final int PAGESIZE = 10;
+	public static final int PAGESIZE = 8;
 	
 	/**
 	 * 通过pageIndex和pageSize计算获得rowIndex

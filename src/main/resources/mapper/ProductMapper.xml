@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="stu.ljx.o2o.dao.ProductMapper">
+	<!-- 2查询符合条件的商品列表2 -->
+	<!-- 查询条件：商铺ID、商品名称（模糊）、商品类别、商品状态以及它们的组合 -->
+	<sql id="queryProductByCnd">
+		<!-- 商铺ID -->
+		<if test="productCnd.shop != null and productCnd.shop.shopId != null">
+			and shop_id = #{productCnd.shop.shopId}
+		</if>
+		<!-- 商品名称（模糊查询） -->
+		<if test="productCnd.productName != null and '' != productCnd.productName">
+			and product_name like '%${productCnd.productName}%'
+		</if>
+		<!-- 商品类别 -->
+		<if test="productCnd.productCategory != null and productCnd.productCategory.productCategoryId != null">
+			and product_category_id = #{productCnd.productCategory.productCategoryId}
+		</if>
+		<!-- 商品状态 -->
+		<if test="productCnd.enableStatus != null">
+			and enable_status = #{productCnd.enableStatus}
+		</if>
+	</sql>
+	<select id="queryProduct" resultType="Product">
+		SELECT
+            product_id,
+            product_name,
+            product_desc,
+            img_addr,
+            normal_price,
+            promotion_price,
+            priority,
+            create_time,
+            last_edit_time,
+            enable_status,
+            product_category_id,
+            shop_id
+        FROM
+            tb_product
+        <where>
+            <include refid="queryProductByCnd"/>
+        </where>
+        ORDER BY priority DESC
+        LIMIT #{rowIndex} , #{pageSize}
+	</select>
+	
+	<!-- 3查询符合条件的商铺的数量3 -->
+	<select id="countProduct" resultType="Integer">
+		SELECT
+            count(1)
+        FROM       	
+            tb_product
+        <where>
+            <include refid="queryProductByCnd"/>
+        </where>
+	</select>
+	
 	<!-- 添加商品 -->
 	<insert id="insertProduct" parameterType="Product" useGeneratedKeys="true" keyProperty="productId" keyColumn="product_id">
 		INSERT INTO
@@ -29,12 +83,121 @@
 			#{productCategory.productCategoryId},
 			#{shop.shopId} )
 	</insert>
+	
 	<update id="updateProductImg" parameterType="Product">
 		UPDATE tb_product
 		<set>
 			<if test="imgAddr != null">img_addr = #{imgAddr}</if>
 		</set>
-		WHERE product_id = #{productId}
+		WHERE
+    		product_id = #{productId}
+    	AND
+    		shop_id = #{shop.shopId}
+	</update>
+	
+	<!-- 关联查询指定ID的商品 -->
+	<resultMap id="productMap" type="Product">
+        <id column="product_id" property="productId"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_desc" property="productDesc"/>
+        <result column="img_addr" property="imgAddr"/>
+        <result column="normal_price" property="normalPrice"/>
+        <result column="promotion_price" property="promotionPrice"/>
+        <result column="priority" property="priority"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_edit_time" property="lastEditTime"/>
+        <result column="enable_status" property="enableStatus"/>
+        <!-- 一对一关联商品类别 -->
+        <association property="productCategory" column="product_category_id" javaType="ProductCategory">
+            <id column="product_category_id" property="productCategoryId"/>
+        </association>
+        <!-- 一对一关联商品所属商铺-->
+        <association property="shop" column="shop_id" javaType="Shop">
+            <id column="shop_id" property="shopId"/>
+        </association>
+        <!-- 一对多关联商品详情图片ProductImg -->
+        <collection property="productImgSet" column="product_id" ofType="ProductImg">
+            <id column="product_img_id" property="productImgId"/>
+            <result column="detail_img_addr" property="imgAddr"/>
+            <result column="img_desc" property="imgDesc"/>
+            <result column="priority" property="priority"/>
+            <result column="create_time" property="createTime"/>
+            <result column="product_id" property="productId"/>
+        </collection>
+    </resultMap>
+	<select id="getProductById" parameterType="Integer" resultMap="productMap">
+        SELECT
+            p.product_id,
+            p.product_name,
+            p.product_desc,
+            p.img_addr,
+            p.normal_price,
+            p.promotion_price,
+            p.priority,
+            p.create_time,
+            p.last_edit_time,
+            p.enable_status,
+            p.product_category_id,
+            p.shop_id,
+            pm.product_img_id,
+            pm.img_addr as detail_img_addr,
+            pm.img_desc,
+            pm.priority,
+            pm.create_time
+        FROM
+            tb_product p
+         <!-- 左连接商品详情图片表LEFT JOIN（即使该商品没有商品详情图片） -->
+        LEFT JOIN
+            tb_product_img pm
+        ON
+            p.product_id = pm.product_id
+        WHERE
+            p.product_id = #{productId}
+        ORDER BY
+            pm.priority DESC
+    </select>
+    
+    <!-- 更新商品信息 -->
+    <!-- 商品ID、商品所属商铺、商品创建时间不可更改 -->
+    <update id="updateProduct" parameterType="Product">
+    	UPDATE
+    		tb_product
+    	<set>
+    		<if test="productName != null">product_name = #{productName},</if>
+            <if test="productDesc != null">product_desc = #{productDesc},</if>
+            <if test="imgAddr != null">img_addr = #{imgAddr},</if>
+            <if test="normalPrice != null">normal_price = #{normalPrice},</if>
+            <if test="promotionPrice != null">promotion_price = #{promotionPrice},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="lastEditTime != null">last_edit_time = #{lastEditTime},</if>
+            <if test="productCategory != null and productCategory.productCategoryId != null ">product_category_id = #{productCategory.productCategoryId}</if>
+    	</set>
+    	WHERE
+    		product_id = #{productId}
+    	AND
+    		shop_id = #{shop.shopId}
+    </update>
+    
+    <!-- 更改商品状态实现上架、下架操作 -->
+    <update id="updateProductStatus" parameterType="Product">
+		UPDATE tb_product
+		<set>
+			<if test="enableStatus != null">enable_status = #{enableStatus}</if>
+		</set>
+		WHERE
+    		product_id = #{productId}
+    	AND
+    		shop_id = #{shop.shopId}
+	</update>
+	
+	<!-- 将商品类别置为null -->
+	<update id="updateProductCategoryToNull">
+		UPDATE tb_product
+		SET
+			product_category_id = null
+		WHERE
+    		product_category_id = #{productCategoryId}
+    	AND
+    		shop_id = #{shopId}
 	</update>
 </mapper>
-

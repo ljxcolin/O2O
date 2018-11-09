@@ -17,12 +17,39 @@ public class TestShopCategoryService extends BaseTest {
 	
 	@Test
 	public void testGetShopCategoryList() {
+		List<ShopCategory> shopCategoryList = null;
 		ShopCategory shopCategory = new ShopCategory();
-		List<ShopCategory> shopCategoryList = shopCategoryService.getShopCategoryList(shopCategory);
-		assertEquals(3, shopCategoryList.size());
+		//shopCategoryCnd!=null--> 查询所有一级商铺类别
+//		shopCategoryList = shopCategoryService.getShopCategoryList(shopCategory);
+//		assertEquals(2, shopCategoryList.size());
+//		for (ShopCategory category : shopCategoryList) {
+//			System.out.println(category);
+//		}
+		
+		//shopCategoryCnd!=null && parent!=null-->查询所有二级商铺类别
+//		ShopCategory parent = new ShopCategory();
+//		shopCategory.setParent(parent);
+//		shopCategoryList = shopCategoryService.getShopCategoryList(shopCategory);
+//		assertEquals(3, shopCategoryList.size());
+//		for (ShopCategory category : shopCategoryList) {
+//			System.out.println(category);
+//		}
+		
+		//shopCategoryCnd!=null && parent!=null && parent.shopCategoryId != null-->查询指定一级商铺类别下的所有二级商铺类别
+		ShopCategory parent = new ShopCategory();
+		parent.setShopCategoryId(1);
+		shopCategory.setParent(parent);
+		shopCategoryList = shopCategoryService.getShopCategoryList(shopCategory);
+		assertEquals(2, shopCategoryList.size());
 		for (ShopCategory category : shopCategoryList) {
 			System.out.println(category);
 		}
+		
+//		shopCategoryList = shopCategoryService.getShopCategoryList(null);
+//		assertEquals(5, shopCategoryList.size());
+//		for (ShopCategory category : shopCategoryList) {
+//			System.out.println(category);
+//		}
 	}
 	
 }

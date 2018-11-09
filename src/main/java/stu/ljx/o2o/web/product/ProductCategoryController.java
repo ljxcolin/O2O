@@ -21,7 +21,6 @@ import stu.ljx.o2o.entity.Shop;
 import stu.ljx.o2o.enums.ProductCategoryStateEnum;
 import stu.ljx.o2o.exception.ProductException;
 import stu.ljx.o2o.service.ProductCategoryService;
-import stu.ljx.o2o.util.SessionUtil;
 
 @Controller
 @RequestMapping("/product/category")
@@ -29,6 +28,8 @@ public class ProductCategoryController {
 	
 	@Autowired
 	private ProductCategoryService productCategoryService;
+	
+	
 	
 	/**
 	 * 获取指定商铺的所有商品类别
@@ -43,7 +44,7 @@ public class ProductCategoryController {
         ProductCategoryStateEnum pcse = null;
 		try {
 			//从session中获取当前商铺，出于安全考虑，不依赖前端传入
-			Shop currentShop = SessionUtil.getCurrentShop(request);
+			Shop currentShop = getCurrentShop(request);
 			if(currentShop != null && currentShop.getShopId() != null) {
 				productCategories = productCategoryService.getProductCategories(currentShop.getShopId());
 				return new Result<List<ProductCategory>>(true, productCategories);
@@ -56,7 +57,7 @@ public class ProductCategoryController {
 			return new Result<List<ProductCategory>>(false, pcse.getState(), pcse.getStateInfo());
 		}
 	}
-	
+
 	/**
 	 * 批量新增商品类别，注意事项：见方法内注释
 	 * @param productCategories
@@ -69,7 +70,7 @@ public class ProductCategoryController {
 		Map<String, Object> modelMap = new HashMap<String, Object>();
 		if (productCategories != null && productCategories.size() > 0) {
 			//从session中获取shop的信息
-			Shop currentShop = SessionUtil.getCurrentShop(request);
+			Shop currentShop = getCurrentShop(request);
 			if (currentShop != null && currentShop.getShopId() != null) {
 				//为商品类别设置createTime/lastEditTime/shopId
 				Date createTime = new Date();
@@ -117,7 +118,7 @@ public class ProductCategoryController {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         if (productCategoryId != null && productCategoryId > 0) {
             //从session中获取shop的信息
-            Shop currentShop = SessionUtil.getCurrentShop(request);
+            Shop currentShop = getCurrentShop(request);
             if (currentShop != null && currentShop.getShopId() != null) {
                 try {
                     //删除商品类别
@@ -144,5 +145,9 @@ public class ProductCategoryController {
         }
         return modelMap;
     }
+
+	private Shop getCurrentShop(HttpServletRequest request) {
+		return (Shop)request.getSession().getAttribute("currentShop");
+	}
 	
 }

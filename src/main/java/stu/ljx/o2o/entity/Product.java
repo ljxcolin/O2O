@@ -88,10 +88,10 @@ public class Product implements Serializable {
 	public void setEnableStatus(Integer enableStatus) {
 		this.enableStatus = enableStatus;
 	}
-	public Set<ProductImg> getProductImgList() {
+	public Set<ProductImg> getProductImgSet() {
 		return productImgSet;
 	}
-	public void setProductImgList(Set<ProductImg> productImgSet) {
+	public void setProductImgSet(Set<ProductImg> productImgSet) {
 		this.productImgSet = productImgSet;
 	}
 	public ProductCategory getProductCategory() {

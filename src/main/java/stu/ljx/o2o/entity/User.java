@@ -9,7 +9,7 @@ public class User implements Serializable {
 
 	private Integer userId;
 	private String name;
-	private String profileImag;
+	private String profileImg;
 	private String gender;
 	private String email;
 	/*用户状态：0:'禁止使用'，1:'允许使用'*/
@@ -31,11 +31,11 @@ public class User implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getProfileImag() {
-		return profileImag;
+	public String getprofileImg() {
+		return profileImg;
 	}
-	public void setProfileImag(String profileImag) {
-		this.profileImag = profileImag;
+	public void setprofileImg(String profileImg) {
+		this.profileImg = profileImg;
 	}
 	public String getGender() {
 		return gender;
@@ -76,7 +76,7 @@ public class User implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", name=" + name + ", profileImag=" + profileImag + ", gender=" + gender
+		return "User [userId=" + userId + ", name=" + name + ", profileImg=" + profileImg + ", gender=" + gender
 				+ ", email=" + email + ", enableStatus=" + enableStatus + ", userType=" + userType + ", createTime="
 				+ createTime + ", lastEditTime=" + lastEditTime + "]";
 	}

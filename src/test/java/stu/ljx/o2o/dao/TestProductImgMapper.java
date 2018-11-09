@@ -43,5 +43,11 @@ public class TestProductImgMapper extends BaseTest {
         System.out.println(pic1.getProductImgId() + "---" + pic2.getProductImgId());
         assertEquals(2, row);
 	}
+	
+	@Test
+	public void testDeleteProductById() {
+		int row = productImgMapper.deleteProductImgById(7);
+		assertEquals(2, row);
+	}
 
 }

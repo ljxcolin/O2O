@@ -1,0 +1,32 @@
+@charset "UTF-8";
+.row-product {
+    border: 2px solid #999;
+    border-bottom: none;
+    margin: 0 5px;
+    padding: .5rem;
+}
+.row-product:last-child {
+    border-bottom: 2px solid #999;
+}
+.row .col-30 {
+	width: 28%;
+	margin-left: 2%;
+}
+.row .col-25 {
+	width: 23%;
+	margin-left: 2%;
+}
+.row .col-45 {
+	width: 43%;
+	margin-left: 2%;
+}
+.info-item {
+	text-align: center;
+}
+.product-name {
+    white-space: nowrap;
+    overflow-x: scroll;
+}
+.product-wrap a {
+    margin-right: .5rem;
+}

@@ -19,5 +19,12 @@
 			#{productImg.productId})
 		</foreach>
 	</insert>
+	
+	<!-- 删除指定商品的详情图片 -->
+	<delete id="deleteProductImgById" parameterType="Integer">
+		DELETE FROM
+			tb_product_img
+		WHERE
+			product_id = #{productId}
+	</delete>
 </mapper>
-

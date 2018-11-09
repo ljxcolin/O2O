@@ -7,9 +7,10 @@ import java.util.List;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import stu.ljx.o2o.BaseTest;
 import stu.ljx.o2o.entity.ShopCategory;
 
-public class TestShopCategoryMapper {
+public class TestShopCategoryMapper extends BaseTest{
 
 	@Autowired
 	private ShopCategoryMapper shopCategoryMapper;
@@ -40,6 +41,11 @@ public class TestShopCategoryMapper {
 		for (ShopCategory category : shopCategoryList) {
 			System.out.println(category);
 		}
+		
+		//查询所有一级商铺类别parent_id = null
+		shopCategoryList = shopCategoryMapper.queryShopCategory(null);
+		assertEquals(2, shopCategoryList.size());
+		System.out.println(shopCategoryList.get(0));
 	}
 	
 }

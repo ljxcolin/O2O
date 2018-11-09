@@ -6,6 +6,8 @@ import stu.ljx.o2o.entity.ShopCategory;
 
 public interface ShopCategoryService {
 	
-	List<ShopCategory> getShopCategoryList(ShopCategory shopCategory);
+	public static final String SCLISTKEY = "shopcategory";
+	
+	List<ShopCategory> getShopCategoryList(ShopCategory shopCategoryCnd);
 	
 }

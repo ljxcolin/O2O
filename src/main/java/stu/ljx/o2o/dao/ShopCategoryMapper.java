@@ -18,6 +18,6 @@ public interface ShopCategoryMapper {
 	 * 	因此需要加个入参ShopCategory，并通过MyBatis提供的注解@Param与Mapper映射文件中的SQL关联起来，在SQL中进行判断
 	 * @return
 	 */
-	List<ShopCategory> queryShopCategory(@Param("shopCategoryCnd")ShopCategory shopCategory);
+	List<ShopCategory> queryShopCategory(@Param("shopCategoryCnd")ShopCategory shopCategoryCnd);
 	
 }

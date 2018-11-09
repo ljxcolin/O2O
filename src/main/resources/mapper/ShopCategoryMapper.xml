@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="stu.ljx.o2o.dao.ShopCategoryMapper">
-	<!-- 0获取符合条件的二级商铺类别0 -->
-	<select id="queryShopCategory" resultType="ShopCategory">
+	<!-- 0查询商铺类别0 -->
+	<!-- 首页仅展示一级类别的商铺，商铺注册时商铺类别只能选择二级商铺类别，不能挂载一级商铺类别 -->
+	<!-- 一级类别：parent_id=null；二级类别：parent_id != null -->
+	<select id="queryShopCategory" parameterType="ShopCategory" resultType="ShopCategory">
 		SELECT
 			shop_category_id,
             shop_category_name,
@@ -15,13 +17,18 @@
 		FROM
 			tb_shop_category
 		<where>
-			<!-- 商铺分类只能选择二级商铺类别，不能挂载一级商铺类别 -->
-			<!-- 一级类别：parent_id=null；二级类别：parent_id != null -->
-			<if test="shopCategoryCnd != null">
+			<!-- 查询所有一级商铺类别，用于首页展示 -->
+			<if test="shopCategoryCnd != null and shopCategoryCnd.parent == null">
+				and parent_id is null
+			</if>	
+			
+			<!-- 查询所有二级商铺类别 -->
+			<if test="shopCategoryCnd != null and shopCategoryCnd.parent != null">
 				and parent_id is not null
 			</if>
 			<!-- 如果传递了一级类别的id，则查询其对应的二级类别 -->
-			<if test="shopCategoryCnd.parent != null">
+			<if test="shopCategoryCnd != null and shopCategoryCnd.parent != null
+				and shopCategoryCnd.parent.shopCategoryId != null">
 				and parent_id = #{shopCategoryCnd.parent.shopCategoryId}
 			</if>
 		</where>

@@ -8,7 +8,7 @@ import stu.ljx.o2o.exception.ShopException;
 
 public interface ShopService {
 
-	ShopExecution addShop(Shop shop, InputStream shopImgIns, String shopImgName);
+	ShopExecution addShop(Shop shop, InputStream shopImgIns, String shopImgName) throws ShopException;
 	
 	Shop getShopById(Integer shopId);
 	

@@ -59,6 +59,32 @@
 	29、商品添加Service层开发与重构
 	30、商品添加Controller层开发
 	31、商品添加View层实现
+	36、商品列表DAO+SERVICE+CONTROLLER三层实现
+	37、商品列表View层实现
+	32、商品编辑Dao层开发
+	33、商品编辑Service层开发
+	34、商品编辑Controller层开发
+	35、商品编辑View层开发
+	38、商品类别，解绑商品与商品类别的关系
+	39、前端展示，首页轮播图和一级商铺Dao+Service+Controller层的实现
+	40、前端展示，首页轮播图和一级商铺View层的实现
+	41、前端展示，店铺列表页面Dao+Service+Controller层的实现
+	42、前端展示，店铺列表页面View层的实现
+	43、前端展示，店铺详情页面从后端到前端的实现
+	44、DES加密，关键配置信息（数据库用户名和密码）进行DES加密
+	45、Redis缓存，配置Redis在Service层加入缓存
+		Service层加入缓存的配置步骤
+			1、在pom.xml中加入jedis.jar依赖包
+			2、编写redis.properties配置文件
+			3、spring-dao.xml加载redis.properties
+			4、封装JedisPool，用于创建JedisPool
+			5、封装操作redis的工具类JedisUtil
+			6、新建spring-redis.xml配置redis连接池和bean
+			7、web.xml中加载spring-redis.xml
+			8、Service层使用缓存
+	46、Redis缓存，头条信息+商铺目录Service层加入缓存
+	47、Redis缓存，清除缓存接口的开发
+	48、用户登录，用户登录Dao-Service-Controller-View层的开发
 	
 	
 开发流程：，这里我们将类别管理这部分的内容从下至上来实现下吧。
@@ -141,7 +167,45 @@ Controller层与Service不要出现重复的判断
 getMessage:获取异常消息
 toString: 类名+异常信息
 
+throws和throw的使用
+throws：方法不处理异常，将方法内产生的异常向外抛出
+throw：方法处理，程序主动抛出一个异常
+
+service层该如何处理异常（权衡throws和throw）
+如果service的主业务方法中没有语句异常抛出，方法头可以不加throws，如有业务逻辑异常则使用throw
+如果service的主业务方法中有语句异常抛出，则将其try catch，继续使用throw抛给controller层
+
+dao层不抛异常
+service层catch住Dao层的异常，往controller层抛出自定义异常
+controller层可以选择catch后处理，或有exceptionHandler处理
+
+org.springframework.context.annotation.ConflictingBeanDefinitionException: Annotation-specified bean name '/frontend' for bean class [stu.ljx.o2o.web.frontend.MainController] conflicts with existing, 
+non-compatible bean definition of same name and class [stu.ljx.o2o.web.frontend.FrontEndController]
 
 
+<Context docBase="E:/STSFile/upload/o2o/images/headline" path="/headline"/>
+
+今天 静下心仔细看了报错的异常:
+
+Caused by: redis.clients.jedis.exceptions.InvalidURIException: Cannot open Redis connection due invalid URI. x.x.x.x at redis.clients.jedis.JedisFactory. (JedisFactory.java:37) at redis.clients.jedis.JedisPool. (JedisPool.java:94) at redis.clients.jedis.JedisPool. (JedisPool.java:89) 
+仔细看了源码,发现是自己使用spring初始化JedisPool时未指定结构方法参数的类型导致了,初始化对象时跑到了别的初始化话方法上了
+如果constructor-arg 未指定type 初始化的时候JedisPool有两个相同参数个数的构造方法会选择错误,造成类似于这样的错误。
+JedisPool(GenericObjectPoolConfig, String, int)
+JedisPool(GenericObjectPoolConfig, URI, int)
 
 
+windows 下后台启动 redis
+1. 进入 DOS窗口
+2. 在进入Redis的安装目录
+3. 输入：redis-server --service-install redis.windows.conf --loglevel verbose ( 安装redis服务 )
+4.  输入：redis-server --service-start ( 启动服务 )
+5. 输入：redis-server --service-stop （停止服务）
+启动指定的配置文件redis-server --service-start redis.windows-service.conf
+
+
+根据数据的特点，不经常变动的数据 即时性要求没有那么高的读数据 为了减轻DB压力，我们可以将数据放到缓存中。
+
+Illegal modifier for the interface field AreaService.AREALISTKEY; 
+only public, static & final are permitted
+
+跨service事务该如何处理
