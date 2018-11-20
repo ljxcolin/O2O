@@ -104,7 +104,7 @@ $(function() {
      * submit按钮触发的操作
      */
     $('#submit').click(function() {
-    	debugger;
+    	//debugger;
         //获取页面表单的值
         var shop = {};
         /*注意： shop对象的属性要和Shop实体类中的属性保持一致，因为后台接收到shopStr后，会将Json转换为实体类。
@@ -131,7 +131,7 @@ $(function() {
         var shopImg = $('#shop-img')[0].files[0];
         
         //验证码
-        var verifyCodeActual =$('#j_kaptcha').val();
+        var verifyCodeActual = $('#j_kaptcha').val();
         console.log('verifyCodeActual: ' + verifyCodeActual);
         if(!verifyCodeActual){
             $.toast('请输入验证码');

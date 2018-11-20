@@ -5,7 +5,7 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 public class PropertiesResolver extends PropertyPlaceholderConfigurer {
 	
 	//需要加密的字段数组
-    private String[] encryptPropNames = {"jdbc.user", "jdbc.password"};
+    private String[] encryptPropNames = {"jdbc.user", "jdbc.password", "redis.password"};
 
     /**
      * 对密文属性转换为明文属性
@@ -37,5 +37,5 @@ public class PropertiesResolver extends PropertyPlaceholderConfigurer {
         }
         return false;
     }
-	
+
 }

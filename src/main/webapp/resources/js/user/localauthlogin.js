@@ -52,6 +52,7 @@ $(function() {
     });
 
     $('#register').click(function() {
-        window.location.href = '/o2o/user/localauth/register';
+        window.location.href = '/o2o/useradmin/localauth/register';
+        return false;
     });
 });

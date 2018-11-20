@@ -22,4 +22,6 @@ public interface LocalAuthMapper {
 	 */
 	LocalAuth queryUserByName(String userName);
 	
+	int insertUser(LocalAuth localAuth);
+	
 }

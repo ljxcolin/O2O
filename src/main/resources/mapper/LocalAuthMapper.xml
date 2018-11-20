@@ -47,5 +47,24 @@
 		AND
 			la.password = #{password}	
 	</select>
+	<select id="queryUserByName" resultType="LocalAuth">
+		SELECT * FROM tb_local_auth WHERE user_name = #{userName}
+	</select>
+	<insert id="insertUser" parameterType="LocalAuth" useGeneratedKeys="true" keyProperty="localAuthId" keyColumn="local_auth_id">
+		INSERT INTO
+			tb_local_auth (
+			user_id,
+			user_name,
+			password,
+			create_time,
+			last_edit_time)
+		VALUES (
+			#{user.userId},
+			#{userName},
+			#{password},
+			#{createTime},
+			#{lastEditTime}
+		)
+	</insert>
 </mapper>
 

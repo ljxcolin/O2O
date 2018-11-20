@@ -96,8 +96,26 @@ public class DESUtil {
     public static void main(String[] args) {
         System.out.println(getEncryptString("root"));
         System.out.println(getEncryptString("ljx1234"));
-        System.out.println(getDecryptString("ekgfTy/5pYk="));
-        System.out.println(getDecryptString("x7sp2OYFH04="));
+        System.out.println("###########################");
+        //System.out.println(getDecryptString("ekgfTy/5pYk="));
+        //System.out.println(getDecryptString("x7sp2OYFH04="));
+    	System.out.println(getEncryptString("mine"));
+    	System.out.println(getEncryptString("minEcSql&5312"));
+    	System.out.println("###########################");
+    	System.out.println(getEncryptString("work"));
+    	System.out.println(getEncryptString("workEcSql&5312"));
+    	System.out.println("###########################");
+    	System.out.println(getEncryptString("ecSRedis&5312"));
+    	/*ekgfTy/5pYk=
+    	x7sp2OYFH04=
+    	###########################
+    	U0OyKTKoR9U=
+    	dzsLKlW2RZU1MB5jNkD9RA==
+    	###########################
+    	nun/E6RgtRE=
+    	orxXxELuXfxC/Brcn6rnSw==
+    	###########################
+    	7yzGDmHMv0M1MB5jNkD9RA==*/
     }
 	
 }

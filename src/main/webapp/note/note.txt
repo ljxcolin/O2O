@@ -85,6 +85,7 @@
 	46、Redis缓存，头条信息+商铺目录Service层加入缓存
 	47、Redis缓存，清除缓存接口的开发
 	48、用户登录，用户登录Dao-Service-Controller-View层的开发
+	49、用户注册，用户登录Dao-Service-Controller-View层的开发
 	
 	
 开发流程：，这里我们将类别管理这部分的内容从下至上来实现下吧。
@@ -209,3 +210,16 @@ Illegal modifier for the interface field AreaService.AREALISTKEY;
 only public, static & final are permitted
 
 跨service事务该如何处理
+
+
+域名
+购买域名
+实名认证/备案
+解析设置
+	-->添加记录/新手引导
+	
+修改DNS
+
+
+如何配置域名/IP+Port的方式直接访问项目
+<Context docBase="$CATALINA_HOME/webapps/app" path="/" reloadable="false"/>

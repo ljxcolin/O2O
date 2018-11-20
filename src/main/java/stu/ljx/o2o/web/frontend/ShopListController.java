@@ -31,7 +31,7 @@ import stu.ljx.o2o.util.HttpSvlReqUtil;
  */
 @Controller
 @RequestMapping("/frontend")
-public class ShopListController {	
+public class ShopListController {
 
     @Autowired
     private ShopService shopService;

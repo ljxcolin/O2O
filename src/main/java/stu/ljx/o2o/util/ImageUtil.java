@@ -73,6 +73,30 @@ public class ImageUtil {
 	}
 	
 	/**
+	 * 生成单个无水印缩略图
+	 * @param ImageHolder 需上传的目标文件（即前台上传的图片）
+	 * @param destPath 上传后的文件的存放目录
+	 * @return 缩略图的相对路径（可减少因项目迁移带来的不必要的改动）
+	 */
+	public static String generateRawImg(ImageHolder imgHolder, String destPath) {
+		String relativePath = null;
+		try {
+			String fileName = randomFileName();
+			String extension = getFileExtension(imgHolder.getFileName());
+			validateDestPath(destPath);
+			relativePath = destPath + fileName + extension;
+			logger.info("图片相对路径：{}", relativePath);
+			File destFile = new File(FileUtil.getImgRootPath() + relativePath);
+			logger.info("图片绝对路径：{}", destFile.getAbsolutePath());
+			Thumbnails.of(imgHolder.getIns()).size(300, 300).outputQuality(0.8).toFile(destFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("创建水印图片失败：" + e.toString());
+		}
+		return relativePath;
+	}
+	
+	/**
 	 * 批量生成商品详情图片
 	 */
 	public static Set<String> generateRawImgs(Set<ImageHolder> productDetailImgs, String destPath) {

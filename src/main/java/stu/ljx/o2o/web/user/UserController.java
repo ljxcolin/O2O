@@ -10,8 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import stu.ljx.o2o.dto.ImageHolder;
 import stu.ljx.o2o.entity.LocalAuth;
+import stu.ljx.o2o.entity.User;
 import stu.ljx.o2o.service.LocalAuthService;
 import stu.ljx.o2o.util.HttpSvlReqUtil;
 import stu.ljx.o2o.util.MD5Util;
@@ -71,6 +76,43 @@ public class UserController {
 		}else {
 			modelMap.put("success", false);
 			modelMap.put("errMsg", "用户名和密码不能为空");
+		}
+		return modelMap;
+	}
+	
+	@RequestMapping(value="/localauth/register", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> localAuthRegister(HttpServletRequest request, MultipartFile userImg){
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		if(!VerifyCodeUtil.verifyCode(request)) {
+			modelMap.put("success", false);
+			modelMap.put("errMsg", "验证码不正确，请重新输入");
+			return modelMap;
+		}
+		String userStr = HttpSvlReqUtil.getString(request, "userStr");
+		String localAuthStr = HttpSvlReqUtil.getString(request, "localAuthStr");
+		User user = null;
+		LocalAuth localAuth = null;
+		ImageHolder profileImg = null;
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			user = mapper.readValue(userStr, User.class);
+			localAuth = mapper.readValue(localAuthStr, LocalAuth.class);
+			if(userImg != null) {
+				profileImg = new ImageHolder(userImg.getInputStream(), userImg.getOriginalFilename());
+			}
+			int row = localAuthService.addUser(user, localAuth, profileImg);
+			if(row > 0) {
+				modelMap.put("success", true);
+				modelMap.put("sucMsg", "注册成功");
+			}else {
+				modelMap.put("success", false);
+				modelMap.put("sucMsg", "注册失败");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			modelMap.put("success", false);
+			modelMap.put("errMsg", e.getMessage());
 		}
 		return modelMap;
 	}

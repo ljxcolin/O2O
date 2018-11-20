@@ -11,7 +11,7 @@
     <property name="app.name" value="o2o" />
     <property name="log.level" value="DEBUG"/>
     <property name="log.maxHistory" value="30"/>
-    <!--<property name="log.filePath" value="${catalina.base}/logs/webapps"/>  -->
+    <!-- <property name="log.filePath" value="/opt/logs/${app.name}"/> -->
     <property name="log.filePath" value="E:/STSFile/logs/${app.name}"/>
     <!--格式化输出，%d:日期  %thread:线程名 %-5level:级别，从左显示5个字符宽度 %msg:日志消息 %n:换行符 -->
     <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n"/>

@@ -13,4 +13,9 @@ public class UserAdminController {
 		return "user/localauthlogin";
 	}
 	
+	@RequestMapping(value="/localauth/register", method=RequestMethod.GET)
+	public String localAuthRegister() {
+		return "user/localauthregister";
+	}
+	
 }

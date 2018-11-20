@@ -1,7 +1,7 @@
 /**
- * 
+ * 通用函数JS脚本
  */
-//校验验证码
+//更新验证码
 function changeVerifyCode(img){
     img.src = "/o2o/kaptcha?date=" + new Date().getTime();
 }

@@ -2,6 +2,7 @@ package stu.ljx.o2o.util;
 
 import java.io.File;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,12 +59,28 @@ public class FileUtil {
 	public static String getProductImgPath(Integer shopId, Integer productId) {
 		if((shopId != null && shopId > 0) && (productId != null && productId > 0)) {
 			String shopImgPath = getShopImgPath(shopId);
-			String productImgPath = shopImgPath + "product_" +productId + "/";
+			String productImgPath = shopImgPath + "product_" + productId + "/";
 			productImgPath = productImgPath.replace("/", FileUtil.separator);
 			logger.debug("productImgPath={}", productImgPath);
 			return productImgPath;
 		}
 		logger.info("The shop or the product doesn't exist!");
+		return null;
+	}
+	
+	/**
+	 * 获取用户头像图片的目录，以用户名划分
+	 * @param userName
+	 * @return
+	 */
+	public static String getUserImgPath(String userName) {
+		if((StringUtils.isNotBlank(userName))) {
+			String userImgPath = "/upload/userImage/" + userName + "/";
+			userImgPath = userImgPath.replace("/", FileUtil.separator);
+			logger.debug("userImgPath={}", userImgPath);
+			return userImgPath;
+		}
+		logger.info("The user doesn't exist!");
 		return null;
 	}
 	

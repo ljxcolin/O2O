@@ -1,0 +1,73 @@
+Eclipse远程调试
+1、关闭并卸载旧的tomcat
+2、在Linux中创建本地普通用户
+	useradd colin
+	passwd colin
+	New password: lee5312
+	Retype new password: lee5312
+3、切换到普通用户colin
+	su colin
+4、将上传好的tomcat解压到colin的根目录
+	tar -xf apache-tomcat-8.5.34.tar.gz -C /home/colin
+5、切换到用户colin的根目录
+	cd ~
+6、重命名
+	mv apache-tomcat-8.5.34 tomcat8
+	
+7、修改server.xml文件
+	cd tomcat8/conf
+	vim server.xml
+		端口号保持8080（非root用户端口号不能低于1000）
+		添加虚拟路径：<Context docBase="/home/colin/o2o/upload" path="/upload" reloadable="false"/>
+	:wq
+8、切换回root并修改profile文件
+	su root
+	vim /etc/profile
+		export CATALINA_HOME=/home/colin/tomcat8
+	source /etc/profile
+9、切换回colin并启动tomcat
+	su colin
+	cd ~
+	cd tomcat8
+	./bin/startup.sh
+10、在阿里云中开放8080端口
+11、部署项目并在浏览器中使用IP+Port的方式访问
+12、无端口访问模式并支持微信访问（微信默认支持80端口）
+	将浏览器发送给80端口的请求转发到8080端口
+	解决方案：
+		nginx
+		改变CentOS防火墙机制
+		使用iptables设置端口转发：
+			（1）停止firewalld服务：systemctl stop firewalld.service
+			（2）停用firewalld服务：systemctl disable firewalld.service
+			（3）安装iptables：yum -y install iptables-servcies
+			（4）执行命令实现端口转发：
+				iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
+				service iptables save(sysn /etc/sysconfig/iptables)
+			（5）重启iptables服务：systemctl restart iptables.service
+			（6）启用iptables服务：systemctl enable iptables.service
+		直接使用firewalld设置端口转发
+			（1）允许IP伪装：firewall-cmd –permanent –add-masquerade	//–permanent指断电后重启仍生效
+			（2）添加端口转发：firewall-cmd –permanent –zone=public –add-forward-port=port=80:proto=tcp:toaddr=47.107.139.28:toport=8080 
+				将80端口的请求转发至8080：firewall-cmd –permanent –zone=public --add-forward-port=port=80:proto=tcp:toport=8080 
+			（3）重载firewall使配置生效：firewall-cmd –reload 
+			（4）移除端口转发配置：firewall-cmd –permanent –zone=public –remove-forward-port=port=80:proto=tcp:toaddr=47.107.139.28:toport=8080	//——移除后也要重启firewall
+			（5）查看是否存在端口转发配置：firewall-cmd –permanent –zone=public –query-forward-port=port=80:proto=tcp:toaddr=47.107.139.28:toport=8080
+13、设置Tomcat支持远程调试
+	vim $CATALINA_HOME/bin/catalina.sh
+	(ps：调用startup.sh时tomcat会去调用catalina.sh)
+	在第一行添加如下配置：
+	CATALINA_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=8888,server=y,suspend=n"
+	连接到localhost:8888提供的调试服务
+		-Xdebug			通知JVM在DEBUG模式下工作
+		-Xrunjdwp		通知JVM使用(Java debug wire protocol)来运行调试环境。该参数同时了一系列的调试选项：
+			transport			指定了调试数据的传送方式
+			dt_socket           指用SOCKET模式
+			server=y/n          VM是否需要作为调试服务器执行
+			suspend=y/n         是否在调试客户端建立连接之后启动VM
+14、在阿里云开发调式接口8888
+15、在Eclipse上远程调试
+	|--打断点
+	|--右击-->debug as-->debug configurations...
+	|--选择new launch configuration，填写远程IP和端口，点击Apply+Debug
+	|--在浏览器中访问并调试

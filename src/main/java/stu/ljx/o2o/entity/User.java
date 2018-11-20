@@ -31,10 +31,10 @@ public class User implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getprofileImg() {
+	public String getProfileImg() {
 		return profileImg;
 	}
-	public void setprofileImg(String profileImg) {
+	public void setProfileImg(String profileImg) {
 		this.profileImg = profileImg;
 	}
 	public String getGender() {
